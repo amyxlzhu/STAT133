@@ -1,0 +1,88 @@
+---
+title: "lab5"
+date: "June 14, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(stringr)
+library(readr)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Counting number of vowels
+letrs <- "gfngenodgsyctyviqyyigeinyngbkwjdjqkrrollhpxdkfldlytympmcgmjynihusebtq"
+a<- str_count(letrs, "a")
+e<- str_count(letrs, "e")
+i<- str_count(letrs, "i")
+o<- str_count(letrs, "o")
+u<- str_count(letrs, "u")
+vowels <- c(a,e,i,o,u)
+vowels
+
+## Exploring new functions: str_pad
+
+1. In this call of `str_pad`, the character vector is a, the minimum width of padded strings is 4, padded characters are added on the left, and the padding character is x. Beginning with the character vector a, the command adds the padding character, x, to the left of the vector until the minimum width of padded strings is reached. This results in "xxxa".
+```{r}
+str_pad("a", width = 4, side = "left", pad = "x")
+```
+
+2. In this call of `str_pad`, the character vector is a, the minimum width of padded strings is 3, padded characters are added on the left, and the padding character is not specified (it is a space as default). Beginning with the character vector a, the command adds the default padding character, a space, to the left of the vector until the minimum width of padded strings is reached. This results in "  a".
+```{r}
+str_pad("a", width = 3, side = "left")
+```
+
+3. In this call of `str_pad`, __YOUR DESCRIPTION__.
+```{r}
+str_pad(c("a", "abc", "abcdef"), 10)
+```
+
+4. In this call of `str_pad`, the character vectors are a, abc, and abcdef, the minimum width of padded strings is 10, the side that padded characters are added is not specified (default seems to be from the left), and the padding character is not specified (it is a space as default). Beginning with the character vectors, the command adds the padding character, a space, to the left of the vector until the minimum width of padded strings is reached. This is results in "         a", "       abc", and "    abcdef" for the different character vectors. 
+```{r}
+str_pad("a", c(5, 10, 20))
+```
+
+5. In this call of `str_pad`, the character vector is a, the minimum width of padded strings is 10, the side that padded characters are added is not species (default seems to be from the left), and the padding characters are "-", "_", and " ". Beginning with the character vector, the command adds the different padding characters to the left of the vector until the minimum width of padded strings is reached. This is results in "---------a", "_________a", and "         a".
+```{r}
+str_pad("a", 10, pad = c("-", "_", " "))
+```
+
+## Regular Expressions
+```{r}
+flags <- read_csv("flags.csv")
+countries <- flags$name
+```
+
+You may have noticed that in the `countries` vector, words in a country's name are separated by `-`.  Use `str_replace_all` to replace the hyphens with spaces.  For example `"Vatican-City"` should be replaced with `"Vatican City"`
+
+```{r}
+str_replace_all(countries,"-"," ")
+```
+
+Use `str_detect` to see if there are any countries with the world "island" in them, ignoring case.  You may also want to look up how to use `ignore.case`.
+True, there are countries with the world "island" in them. 
+```{r}
+countries <- tolower(countries)
+str_detect(countries, "island")
+```
+
+Use `str_subset` to find all countries that begin with a capital `A`.
+```{r}
+str_subset(countries, "^A")
+```
+
+Find all countries that end with `stan`
+```{r}
+str_subset(countries, "stan$")
+```
+
+Use `str_replace_all` to replace the `$`'s in `baws` with `s`'s.  Recall that the `$` is a metacharacter.
+```{r}
+baws <- "Bo$$"
+str_replace_all(baws, "\\$", "s")
+```
+
+Use a character class (denoted by square brackets) to find all countries beginning with a vowel and ending with a consonant.
+```{r}
+str_subset(countries, "^[aeiou].*[^aeiou]$")
+```

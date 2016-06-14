@@ -1,0 +1,163 @@
+---
+title: "homework1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Install the `nycflights13` package by typing `install.packages("nycflights13")` into the console (do not leave this in your R Markdown document).  
+
+```{r}
+library(nycflights13)
+data(flights)
+```
+
+1. How many rows are in this data frame? __num_rows__
+
+num_rows <- nrow(flights)
+
+num_rows
+
+2. How many variables are in this data frame? __num_vars__
+
+num_vars <- ncol(flights)
+
+num_vars
+
+3. What was the longest departure delay? __longest_dep_delay__
+
+longest_dep_delay <- which.max(flights$dep_delay)
+
+longest_dep_delay
+
+4. How long were the top 10 longest flights measured using `air_time`? __longest_flights__
+
+ranking_flight_air_times <- sort(flights$air_time, decreasing = TRUE)
+
+longest_flights <- head(ranking_flight_air_times,10)
+
+longest_flights˚
+
+5. What is the average departure delay time for United Airlines (carrier UA)? __ua_delay__
+
+Received NA as the result for the average due to the presence of "NA" values in the data for departure delay times for United.
+
+UA_flights <- subset(flights, flights$carrier == "UA")
+
+ua_delay <- mean(UA_flights$dep_delay)
+
+ua_delay
+
+6. Order the months from highest average departure delay time to lowest.  __month_delay__
+
+My intention for this question was to create subsets of the data for each month, isolate the column for departure delay times to compute an average, and order the monthly averages by manually sorting (copying and pasting the obtained results). However, based on my progress so far, it seems that the mean will return "NA" for all of the monthly averages because of the presence of "NA" in the data when used to compute the mean.  
+
+January_flights <- subset(flights, flights$month == "1")
+
+mean(January_flights$dep_delay)
+
+February_flights <- subset(flights, flights$month == "2")
+
+mean(February_flights$dep_delay)
+
+March_flights <- subset(flights, flights$month == "3")
+
+mean(March_flights$dep_delay)
+
+April_flights <- subset(flights, flights$month == "4")
+
+mean(April_flights$dep_delay)
+
+May_flights <- subset(flights, flights$month == "5")
+
+mean(May_flights$dep_delay)
+
+June_flights <- subset(flights, flights$month == "6")
+
+mean(June_flights$dep_delay)
+
+July_flights <- subset(flights, flights$month == "7")
+
+mean(July_flights$dep_delay)
+
+August_flights <- subset(flights, flights$month == "8")
+
+mean(August_flights$dep_delay)
+
+September_flights <- subset(flights, flights$month == "9")
+
+mean(September_flights$dep_delay)
+
+October_flights <- subset(flights, flights$month == "10")
+
+mean(October_flights$dep_delay)
+
+November_flights <- subset(flights, flights$month == "11")
+
+mean(November_flights$dep_delay)
+
+December_flights <- subset(flights, flights$month == "12")
+
+mean(December_flights$dep_delay)
+
+monthly_averages <- c(mean(January_flights$dep_delay), mean(February_flights$dep_delay), mean(March_flights$dep_delay), mean(April_flights$dep_delay), mean(May_flights$dep_delay), mean(June_flights$dep_delay), mean(July_flights$dep_delay), mean(August_flights$dep_delay), mean(September_flights$dep_delay), mean(October_flights$dep_delay), mean(November_flights$dep_delay), mean(December_flights$dep_delay))
+
+month_delay <- sort (monthly_averages, decreasing = TRUE)
+
+month_delay
+
+7. How many unique planes does American Airlines (AA) have? __num_planes_aa__
+
+American_airlines <- subset(flights, flights$carrier == "AA")
+
+num_planes_aa <- length(unique(American_airlines$tailnum))
+
+num_planes_aa
+
+8. How many flights originating from JFK flew more than 1000 miles? __jfk_1000mi__
+
+JFK_flights <- subset (flights, flights$origin == "JFK")
+
+jfk_1000 <- length(JFK_flights$distance > 1000)
+
+jfk_1000
+
+9. How many airlines fly from LGA to DFW? __num_lga_dfw__
+
+LGA_flights <- subset (flights, flights$origin == "LGA")
+
+num_lga_dfw <- length (LGA_flights$dest == "DFW")
+
+num_lga_dfw
+
+10. Which airline had the most flights coming out of JFK? __most_flights_jfk__
+
+The airline corresponding with 42076 flights, B6, had the most flights coming out of JFK. 
+
+Flights_jfk <- subset(flights, flights$origin == "JFK")
+
+length(which(Flights_jfk$carrier == "AA"))
+
+length(which(Flights_jfk$carrier == "9E"))
+
+length(which(Flights_jfk$carrier == "B6"))
+
+length(which(Flights_jfk$carrier == "DL"))
+
+length(which(Flights_jfk$carrier == "EV"))
+
+length(which(Flights_jfk$carrier == "HA"))
+
+length(which(Flights_jfk$carrier == "MQ"))
+
+length(which(Flights_jfk$carrier == "UA"))
+
+length(which(Flights_jfk$carrier == "US"))
+
+length(which(Flights_jfk$carrier == "VX"))
+
+most_flights_jfk <- max(length(which(Flights_jfk$carrier == "AA")), length(which(Flights_jfk$carrier == "9E")), length(which(Flights_jfk$carrier == "B6")), length(which(Flights_jfk$carrier == "DL")), length(which(Flights_jfk$carrier == "EV")), length(which(Flights_jfk$carrier == "HA")), length(which(Flights_jfk$carrier == "MQ")), length(which(Flights_jfk$carrier == "UA")), length(which(Flights_jfk$carrier == "US")), length(which(Flights_jfk$carrier == "VX")))
+
+most_flights_jfk

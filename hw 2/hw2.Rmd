@@ -1,0 +1,187 @@
+---
+title: "Strings and Functions"
+author: Amy Zhu
+output: html_document
+---
+
+## Introduction
+
+## Submission Notes
+
+* Remember not to overwrite my file! You should immediately save the Rmd file and the txt file for problem 6 in your own stat133 directory
+
+## File Organization (GitHub Points)
+f
+## Problems 
+
+### Problem 1 - Names of Files (8 pts)
+
+Imagine that you need to generate the names of 4 data files (with .png extension). All the files have the same prefix name but each of them has a different number: `plot001.png`, `plot002.png`, `plot003.png`, and `plot004.png`. We can generate a character vector with these names in R. One naive solution would be to write something like this:
+```{r}
+files <- c('plot001.png', 
+           'plot002.png', 
+           'plot003.png', 
+           'plot004.png')
+```
+
+Now imagine that you need to generate 100 file names. You could write a vector with 100 file names but it's going to take you a while.
+
+Generate a character vector named `files100` containing 100 files names of the form `plotxxx.png` i.e. the names should look like `plot001.png`, `plot002.png`, `plot003.png`, ..., `plot099.png`, `plot100.png`.
+
+Do not use any looping constructions (we haven't covered this yet, and they're slower in `R` for this task).
+
+```{r}
+# Problem 1
+a <- paste0('plot00', 1:9, '.png')
+b <- paste0('plot0', 10:99, '.png')
+c <- paste0('plot', 100, '.png')
+files100 <- c(a, b, c)
+files100
+```
+
+### Problem 2 - USA States Names (8 pts)
+
+One of the datasets that comes with R is `USArrests`. The row names of this data set correspond to the 50 states. This next problem refers to the `states` vector below.  Ignore upper and lower case.
+
+```{r}
+states <- rownames(USArrests)
+```
+
+1. How many states contain the letter `i`?
+```{r}
+states <- tolower(states)
+length(str_subset(states, "i"))
+```
+
+2. How many states do not contain the letter `a`?
+```{r}
+no_a <- "[^a]"
+length(str_subset(states, no_a)) #query: why does this not work?
+
+length(states[-grep('a', states)])
+
+```
+
+3. Which states contain the letter `j`?
+```{r}
+str_subset(states, "j")
+```
+
+4. Which states are formed by two words?
+```{r}
+str_subset(states, '.*[" "].*')
+```
+
+5. Which states start with `W` and end with a consonant (non-vowel)?
+```{r}
+str_subset(states, '^[w].*[^aeiou]$')
+```
+
+6. Which states contain at least three `i`'s (e.g. Illinois)?
+```{r}
+states
+str_subset(states, "(.*i){3,}")
+```
+
+7. Which states contain five vowels (e.g. California)?
+```{r}
+str_subset(states, "(.*[aeiou]){5}")
+```
+
+8. Which states contain three consecutive vowels (e.g. Hawaii)?
+```{r}
+str_subset(states, "[aeiou]{3}")
+```
+
+### Problem 3 Colors in Hexadecimal Notation (4 pts)
+
+Write a function `is_hex()` that checks whether the input is a valid color in hexadecimal notation. A hex color starts with a hash `#` symbol followed by six hexadecimal digits: 0 to 9, and the first six letters A, B, C, D, E, F. Your function should not distinguish between upper and lower case letters.
+
+```{r}
+# is_hex()
+is_hex <- function(x) {
+  x <- "^[#]([0-9]|[aAbBcCdDeEfF]){6}$"
+}
+  
+#query: is it 6 characters with the hexadecimal digits and letters or 6 characters and one of the letters? 
+```
+
+Change `eval` to `TRUE` to test your function.
+```{r, eval=FALSE}
+is_hex("#ff0000")  # TRUE
+is_hex("#123456")  # TRUE
+is_hex("#12Fb56")  # TRUE
+
+is_hex("#1234GF")  # FALSE
+is_hex("#1234567") # FALSE
+is_hex("blue")     # FALSE
+```
+
+### Problem 4 - Reversing Characters (4 pts)
+
+Write a function called `reverse_chars` that reverses a string by characters. You may find the `rev` function useful.
+
+```{r}
+# reverse_chars()
+```
+
+Change `eval` to `TRUE` to test your function.
+```{r, eval=FALSE}
+reverse_chars("Rictusempra")
+reverse_chars("Lumox Maxima")
+reverse_chars("Repello Muggletum")
+```
+
+### Problem 5 - Cleaning XML Data (4 points)
+
+Rarely does text data come clean enough for immediate use.  In this exercise, you'll get a taste of parsing XML Data, which a non-tabular data format that makes use of tags.  The data are sometimes presented in the following form:
+```
+<tag_name>data<\tag_name>
+```
+Your job is to write a function `remove_tag` that takes a vector of text from an XML document and removes the tags, returning a character vector with only the data values.  So, for example:
+
+* `<common>dandelion<\common>` is converted to `dandelion`
+* `<genus>Taraxacum<\genus>` is converted to `Taraxacum`
+* `<kingdom>Plantae<\kingdom>` is converted to `Plantae`
+
+```{r}
+# Your code
+```
+
+Test your code:
+```{r, eval = F}
+phylo <- c("<common>dandelion<\common>",
+           "<genus>Taraxacum<\genus>",
+           "<kingdom>Plantae<\kingdom>")
+remove_tag(phylo)
+```
+
+### Problem 6 - Processing DNA (12 points)
+
+Our genetic blueprint, DNA, consists of nucleotides each composed of a sugar, deoxyribose; a phosphate group; and one of four nitrogen-containing nucleobases: cytosine (C), guanine (G), adenine (A), and thymine (T).  Simplifying the biology a little (ok, a lot), every three bases in a corresponds to an amino acid, a building block for proteins.  For example, the triplets `TTT-CTT-ATT` corresponds to the amino acids _Phenylalanine_, _Leucine_, and _Isoleucine_, which is then abbreviated as `F-L-I`.  
+
+That's the extent of the biology you need to know, but if you want to read more of the technicalities, [see this wikipedia article for more information.](https://en.wikipedia.org/wiki/DNA_codon_table)  We ignore START codons in this problem.
+
+A csv file of the DNA to amino acid conversion is given with the homework.  Use a relative path from your `hw2` directory to load that data frame in with the `read_csv` function in the `readr` package.
+
+Write a function `dna_to_aa` that converts a sequence of DNA given as a string into a sequence of amino acids.  If the sequence contains an invalid DNA character (something outside CGAT), your function should return an error stating "Invalid DNA sequence".
+
+Hints: 
+
+* Break this problem down into steps.  This is more than a one-liner
+* `str_replace_all` can take a named vector as one of its arguments.
+
+```{r}
+# dna_to_aa()
+```
+
+Test your function:
+```{r, eval = F}
+dna_to_aa("GAGCCATGCATT") # "EPCI"
+dna_to_aa("ATCTAGATAGTAGGC") # "IStopIVG"
+dna_to_aa("UCUGAGAAU") # "Invalid DNA sequence"
+```
+
+
+
+

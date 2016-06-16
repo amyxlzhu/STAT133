@@ -20,6 +20,11 @@ u<- str_count(letrs, "u")
 vowels <- c(a,e,i,o,u)
 vowels
 
+#vowels <- c("a", "e", "i", "o", "u")
+#vcount <- str_count(letrs, vowels)
+#names(vcount) <- vowels
+#vcount
+
 ## Exploring new functions: str_pad
 
 1. In this call of `str_pad`, the character vector is a, the minimum width of padded strings is 4, padded characters are added on the left, and the padding character is x. Beginning with the character vector a, the command adds the padding character, x, to the left of the vector until the minimum width of padded strings is reached. This results in "xxxa".
@@ -57,6 +62,8 @@ You may have noticed that in the `countries` vector, words in a country's name a
 
 ```{r}
 str_replace_all(countries,"-"," ")
+
+#countries <- str_replace_all(countries, "-", " ")
 ```
 
 Use `str_detect` to see if there are any countries with the world "island" in them, ignoring case.  You may also want to look up how to use `ignore.case`.
@@ -64,6 +71,8 @@ True, there are countries with the world "island" in them.
 ```{r}
 countries <- tolower(countries)
 str_detect(countries, "island")
+
+#any(str_detect(countries, regex("island", ignore_case = T)))
 ```
 
 Use `str_subset` to find all countries that begin with a capital `A`.

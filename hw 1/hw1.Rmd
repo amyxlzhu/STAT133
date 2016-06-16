@@ -32,6 +32,9 @@ longest_dep_delay <- which.max(flights$dep_delay)
 
 longest_dep_delay
 
+#longest_dep_delay <- max(flights$dep_delay, na.rm = T)
+#longest_dep_delay
+
 4. How long were the top 10 longest flights measured using `air_time`? __longest_flights__
 
 ranking_flight_air_times <- sort(flights$air_time, decreasing = TRUE)
@@ -39,6 +42,9 @@ ranking_flight_air_times <- sort(flights$air_time, decreasing = TRUE)
 longest_flights <- head(ranking_flight_air_times,10)
 
 longest_flights˚
+
+#longest_flights <- head(sort(flights$air_time, decreasing = T), 10)
+#longest_flights
 
 5. What is the average departure delay time for United Airlines (carrier UA)? __ua_delay__
 
@@ -108,6 +114,22 @@ month_delay <- sort (monthly_averages, decreasing = TRUE)
 
 month_delay
 
+#mean_delays <- with(flights, 
+#c(mean(dep_delay[month == 1], na.rm = T),
+#mean(dep_delay[month == 2], na.rm = T),
+#mean(dep_delay[month == 3], na.rm = T),
+#mean(dep_delay[month == 4], na.rm = T),
+#mean(dep_delay[month == 5], na.rm = T),
+#mean(dep_delay[month == 6], na.rm = T),
+#mean(dep_delay[month == 7], na.rm = T),
+#mean(dep_delay[month == 8], na.rm = T),
+#mean(dep_delay[month == 9], na.rm = T),
+#mean(dep_delay[month == 10], na.rm = T),
+#mean(dep_delay[month == 11], na.rm = T),
+#mean(dep_delay[month == 12], na.rm = T)))
+#month_delay <- order(mean_delays, decreasing = T)
+#month_delay
+
 7. How many unique planes does American Airlines (AA) have? __num_planes_aa__
 
 American_airlines <- subset(flights, flights$carrier == "AA")
@@ -115,6 +137,9 @@ American_airlines <- subset(flights, flights$carrier == "AA")
 num_planes_aa <- length(unique(American_airlines$tailnum))
 
 num_planes_aa
+
+#num_planes_aa <- with(flights, length(unique(tailnum[carrier == "AA"])))
+#num_planes_aa
 
 8. How many flights originating from JFK flew more than 1000 miles? __jfk_1000mi__
 
@@ -124,6 +149,9 @@ jfk_1000 <- length(JFK_flights$distance > 1000)
 
 jfk_1000
 
+#jfk_1000mi <- with(flights, sum(distance[origin == "JFK"] > 1000))
+#jfk_1000mi
+
 9. How many airlines fly from LGA to DFW? __num_lga_dfw__
 
 LGA_flights <- subset (flights, flights$origin == "LGA")
@@ -132,6 +160,9 @@ num_lga_dfw <- length (LGA_flights$dest == "DFW")
 
 num_lga_dfw
 
+#carriers <- with(flights, unique(carrier[origin == "LGA" & dest == "DFW"]))
+#num_lga_dfw <- length(carriers)
+#num_lga_dfw
 10. Which airline had the most flights coming out of JFK? __most_flights_jfk__
 
 The airline corresponding with 42076 flights, B6, had the most flights coming out of JFK. 
@@ -161,3 +192,7 @@ length(which(Flights_jfk$carrier == "VX"))
 most_flights_jfk <- max(length(which(Flights_jfk$carrier == "AA")), length(which(Flights_jfk$carrier == "9E")), length(which(Flights_jfk$carrier == "B6")), length(which(Flights_jfk$carrier == "DL")), length(which(Flights_jfk$carrier == "EV")), length(which(Flights_jfk$carrier == "HA")), length(which(Flights_jfk$carrier == "MQ")), length(which(Flights_jfk$carrier == "UA")), length(which(Flights_jfk$carrier == "US")), length(which(Flights_jfk$carrier == "VX")))
 
 most_flights_jfk
+
+#flight_counts_out_jfk <- with(flights, table(carrier[origin == #"JFK"]))
+#most_flights_jfk <- names(sort(flight_counts_out_jfk, decreasing = #T)[1])
+#most_flights_jfk

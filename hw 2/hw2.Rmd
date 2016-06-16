@@ -56,7 +56,7 @@ length(str_subset(states, "i"))
 2. How many states do not contain the letter `a`?
 ```{r}
 no_a <- "[^a]"
-length(str_subset(states, no_a)) #query: why does this not work?
+length(str_subset(states, no_a)) #q: why does this not work?
 
 length(states[-grep('a', states)])
 
@@ -99,15 +99,19 @@ Write a function `is_hex()` that checks whether the input is a valid color in he
 
 ```{r}
 # is_hex()
+
+library(stringr)
+
 is_hex <- function(x) {
-  x <- "^[#]([0-9]|[aAbBcCdDeEfF]){6}$"
+  y <- ("^#([0-9]|[aAbBcCdDeEfF]){6}$")
+  str_detect(x, y)
 }
-  
-#query: is it 6 characters with the hexadecimal digits and letters or 6 characters and one of the letters? 
+
 ```
 
-Change `eval` to `TRUE` to test your function.
-```{r, eval=FALSE}
+Change `eval` to `TRUE` to test your function. 
+
+```{r, eval=TRUE}
 is_hex("#ff0000")  # TRUE
 is_hex("#123456")  # TRUE
 is_hex("#12Fb56")  # TRUE
@@ -123,10 +127,15 @@ Write a function called `reverse_chars` that reverses a string by characters. Yo
 
 ```{r}
 # reverse_chars()
+reverse_chars <- function(x) {
+  rev(x)
+}
+#question: how to use the 'rev' function
 ```
 
 Change `eval` to `TRUE` to test your function.
-```{r, eval=FALSE}
+
+```{r, eval=TRUE}
 reverse_chars("Rictusempra")
 reverse_chars("Lumox Maxima")
 reverse_chars("Repello Muggletum")
@@ -146,13 +155,16 @@ Your job is to write a function `remove_tag` that takes a vector of text from an
 
 ```{r}
 # Your code
+remove_tag <- function(x) {
+  remove(<.*>)
+}
 ```
 
 Test your code:
 ```{r, eval = F}
-phylo <- c("<common>dandelion<\common>",
-           "<genus>Taraxacum<\genus>",
-           "<kingdom>Plantae<\kingdom>")
+phylo <- c("<common>dandelion</common>",
+           "<genus>Taraxacum</genus>",
+           "<kingdom>Plantae</kingdom>")
 remove_tag(phylo)
 ```
 

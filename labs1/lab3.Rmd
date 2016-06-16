@@ -48,6 +48,11 @@ tail(tents,4)
 
 quantile(tents$weight) 
 
+#iqr <- quantile(tents$weight, .75) - quantile(tents$weight, .25)
+#names(iqr) <- NULL
+#iqr
+#unname(diff(quantile(tents$weight, c(.25, .75))))
+
 9. Find the standard deviation of the heights of the `tents`.  Does `R` use `n` or `n-1` in the denominator when calculating standard deviation?
 
 sd(tents$height)
@@ -60,20 +65,27 @@ tents$weight_lbs <- tents$weight/453.6
 
 tents$weight_lbs
 
+#tents$weight_lbs <- tents$weight * 0.00220462
+
 11. The height is given in centimeters.  Add a new variable `height_in` to the data frame that contains the height of the tents in inches. Remember to overwrite `tents` with your update.
 
 tents$height_in <- tents$height/2.54
 
 tents$height_in
 
+#tents$height_in <- tents$height * 0.393701
+
 12. How many tents cost more than $400?
 
 length(which(tents$price>400))
+
+#sum(tents$price > 400)
 
 13. Subset the data frame so that it only contains tents that are valued $300 or less.  Assign the subsetted data frame the name `so_cheap_tents`.
 
 so_cheap_tents <- subset(tents, tents$price<=300)
 
+#so_cheap_tents <- tents[tents$price <= 300, ]
 
 14. Of the tents that are more than $300, what percent are `big-agnes` tents?
 
@@ -84,6 +96,8 @@ tents_over_300
 which (tents_over_300$brand == "big-agnes")
 
 length (which (tents_over_300$brand == "big-agnes"))/nrow(tents_over_300)
+
+#with(tents, 100 * mean(brand[price > 300] == 'big-agnes'))
 
 15. Select the `bestuse` column of `tents` in four different ways: using `$`, `[[]]`, position number and `[]`, and variable name and `[]`. 
 
@@ -99,9 +113,13 @@ tents["bestuse"]
 
 sort(tents$height/tents$weight, decreasing = TRUE)
 
+#with(tents, name[which.max(height / weight)])
+
 17. Run `table` with two arguments, `seasons` and `capacity` (this should be one table).  What did it do?
 
 table(tents$seasons, tents$capacity)
+
+#with(tents, table(seasons, capacity))
 
 The command created a table with categories of seasons as the rows and categories of capacity as the columns.The cell entries were counts of tents that adhered to the stipulations of the rows and columns they were in.
 
@@ -110,6 +128,8 @@ The command created a table with categories of seasons as the rows and categorie
 Backpacking was the most common best use. 
 
 table(tents$bestuse)
+
+#names(sort(table(tents$bestuse), decreasing = T))[1]
 
 19. Create a data frame called `kelty` with only data on kelty tents.  Do the same for `big-agnes`.  Then, combine the two data frames.
 
@@ -120,3 +140,7 @@ big_agnes <- subset(tents, tents$brand == "big-agnes")
 kelty_and_big_agnes <- rbind(kelty, big_agnes)
 
 kelty_and_big_agnes
+
+#kelty <- tents[tents$brand == "kelty", ]
+#big_agnes <- tents[tents$brand == "big-agnes", ]
+#rbind(kelty, big_agnes)

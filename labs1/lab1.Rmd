@@ -40,14 +40,20 @@ which(scored>14)
 
 which(scored==14)
 
+#scored[scored>14]
 
 7. Select the scores equal to 13 or 14.
 
 which(scored==13|scored==14)
 
+#scored[scored == 14]
+
 8. Select the scores between between 7 and 21 points.
 
 which(scored >=7 & scored <=21)
+
+#scored[scored == 13 | scored == 14]
+#scored[scored %in% c(13, 14)]
 
 9. Sort the scores in decreasing order.
 
@@ -77,6 +83,9 @@ scoredover20<-scored[c(5, 8, 11, 13, 15)]
 
 length(scoredover20)
 
+#length(scored[scored > 20])
+#sum(scored > 20)
+
 # Part 2
 These questions refer to both vectors.
 
@@ -88,14 +97,23 @@ scored[7]+against[7]
 
 tail(scored,5)+tail(against,5)
 
+#(scored + against)[seq(length(scored) - 4, length(scored))]
+
 3. What was the difference in scores in each of the odd games?
 
 scored[seq(1,length(scored),2)]-against[seq(1,length(against),2)]
+
+#abs(scored - against)[seq(1, length(scored), 2)]
 
 4. Which games did the Raiders win?
 
 which(scored-against>=0)
 
+#idx <- seq(1, length(scored)) # indices to subset
+#idx[scored > against]
+
 5. Were there any ties?
 
 which(scored-against==0)
+
+#any(scored == against)

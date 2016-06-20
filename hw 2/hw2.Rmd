@@ -49,15 +49,13 @@ states <- rownames(USArrests)
 
 1. How many states contain the letter `i`?
 ```{r}
+library(stringr)
 states <- tolower(states)
 length(str_subset(states, "i"))
 ```
 
 2. How many states do not contain the letter `a`?
 ```{r}
-no_a <- "[^a]"
-length(str_subset(states, no_a)) #q: why does this not work?
-
 length(states[-grep('a', states)])
 
 ```
@@ -128,9 +126,9 @@ Write a function called `reverse_chars` that reverses a string by characters. Yo
 ```{r}
 # reverse_chars()
 reverse_chars <- function(x) {
-  rev(x)
+  lapply(lapply(strsplit(x,NULL), rev), paste, collapse = "")
 }
-#question: how to use the 'rev' function
+
 ```
 
 Change `eval` to `TRUE` to test your function.
@@ -145,26 +143,38 @@ reverse_chars("Repello Muggletum")
 
 Rarely does text data come clean enough for immediate use.  In this exercise, you'll get a taste of parsing XML Data, which a non-tabular data format that makes use of tags.  The data are sometimes presented in the following form:
 ```
-<tag_name>data<\tag_name>
+<tag_name>data</tag_name>
 ```
 Your job is to write a function `remove_tag` that takes a vector of text from an XML document and removes the tags, returning a character vector with only the data values.  So, for example:
 
-* `<common>dandelion<\common>` is converted to `dandelion`
-* `<genus>Taraxacum<\genus>` is converted to `Taraxacum`
-* `<kingdom>Plantae<\kingdom>` is converted to `Plantae`
+* `<common>dandelion</common>` is converted to `dandelion`
+* `<genus>Taraxacum</genus>` is converted to `Taraxacum`
+* `<kingdom>Plantae</kingdom>` is converted to `Plantae`
 
 ```{r}
 # Your code
+#how to apply function to all entries; each subsequent one be a multiple of 5, starting from 3 (i.e. [3], [8], [13]...)
 remove_tag <- function(x) {
-  remove(<.*>)
+x <- unlist(str_split(x, ">|<"))[3]
+y <- unlist(str_split(x, ">|<"))[8]
+z <- unlist(str_split(x, ">|<"))[13]
+return(list(x,y,z))
 }
+
+#does not work; how to rework syntax of <>
+#remove_tag <- function(x) {
+  #str_replace_all(x, "<.*>". " ")
+  #str_replace_all(x, "[<]([Aa-Zz]{+})[>]"," ")
+#}
 ```
 
 Test your code:
 ```{r, eval = F}
+
 phylo <- c("<common>dandelion</common>",
            "<genus>Taraxacum</genus>",
            "<kingdom>Plantae</kingdom>")
+
 remove_tag(phylo)
 ```
 
@@ -185,6 +195,23 @@ Hints:
 
 ```{r}
 # dna_to_aa()
+dna_to_aa <- function(x) {
+  start <- seq(1, nchar(x), 3)
+  stop <- pmin(start+2, nchar(x))
+  triplets <- str_sub(x, start, stop)
+  invalid_triplets <- "[^CGAT]"
+  amino <- c()
+  for (n in 1:length(triplets)) {
+    if (str_detect(x, invalid_triplets)) {
+      return("Invalid DNA sequence")
+    } else {
+      replacement <- as.character(codons[codons$dna_triplet == triplets[n], 2])
+      amino <- append(amino, replacement)
+  }
+  }
+  return(paste(amino, collapse = ""))
+}
+
 ```
 
 Test your function:

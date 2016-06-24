@@ -1,0 +1,85 @@
+---
+title: "lab11"
+author: "Amy Zhu"
+date: "June 23, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages
+The following packages are allowed for this lab:
+
+* `dplyr`
+* `tidyr`
+* `stringr`
+* `readr`
+* `lubridate`
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(readr)
+library(lubridate)
+```
+
+## Billboards Continued
+
+Load the billboard data.  Perform the following tasks/answer the following questions:
+
+df <- read_csv("~/Desktop/stat133-su2016/10-lesson//data/billboard.csv")
+
+1.  Gather the week columns
+
+table <- gather(df, week, ranking, -year, -artist.inverted, -track, -time, -genre, -date.entered, - date.peaked)
+table
+
+2.  Change the week data into integer values (e.g. x1st.week into 1)
+
+integer_table <- mutate(table, week = str_match(week, "[0-9]+"))
+integer_table
+
+3.  Which day of the week are the rankings updated?  Are there any exceptions?
+
+day_of_week <- wday(df$date.peaked, label = TRUE)
+day_of_week
+
+The rankings are updated on Saturdays, with no exceptions. 
+
+4.  Add the week data of the actual dates depicting the day the song's rank was updated.  For example, Destiny's Child's Independent Women Part I went from rank 78 to 63 in its second week of being on the billboard, so its week data should be `2000-09-23` and `2000-09-30`, respectively. Hint: `mutate` using the day the track hit the billboard and something else.
+
+dates <- mutate(integer_table, week_dates = ymd(date.entered) + dweeks(as.integer(week)))
+dates
+
+5.  Use intervals to find how many weeks Destiny's Child's Jumpin' Jumpin' and Independent Woman Part 1 were on the billboard together.
+
+jumpin <- filter(dates, track == "Jumpin' Jumpin'", ranking != "NA")
+independent <- filter(dates, track == "Independent Women Part I", ranking != "NA")
+intj <- ymd(head(jumpin$week_dates, 1)) %--% ymd(tail(jumpin$week_dates, 1))
+inti <- ymd(head(independent$week_dates, 1)) %--% ymd(tail(independent$week_dates, 1))
+int_overlaps(intj, inti)
+
+6.  Review: Clean the artist column: If the artist's name is written as `last, first`, then change the format to `first last`.
+
+clean <- mutate(dates, artist = str_replace_all(artist.inverted, "^(.*),(.*)$", "\\2 \\1"))
+clean
+#q:??? doesn't change anything :'(
+
+7.  Perhaps the single data frame model for tidy data creates too many duplicate data cells (for example, the artist data is really redundant!).  Create two data frames.  The first data frame, `songs`, you should have the variables `artist`, `track`, `year`, and `time`.  In addition, you should create a new variable `song_id`, which is unique to each song (you can choose how you want to assign IDs).  In the second data frame, `rankings`, you should have the following variables:
+  * `song_id` - same as in `songs`
+  * `date` - the day the ranking was updated
+  * `week` - the number of weeks the song has been on the billboard by that date
+  * `rank` - the song's rank on that date.
+`song_id` should be the only variable in common between the two tables and should allow you to cross-reference the information.
+
+df <- select(dates, -genre, -week, -ranking, -date.entered, -date.peaked, -week_dates)
+ID <- unique(songs)
+songs <- mutate(ID, song_ID = row_number())
+songs
+
+test <- inner_join(songs, dates)
+rankings <- select(test, week_dates, week, ranking, song_ID)
+rankings
